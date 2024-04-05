@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from werkzeug.utils import secure_filename
@@ -8,7 +8,13 @@ import logging
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretekey'
-app.config['UPLOAD_FOLDER'] = 'static/files/'
+ALLOWED_EXTENSIONS = {'jpeg', 'pdf'}
+dir_path = os.path.dirname(os.path.realpath(__file__))
+app.config['UPLOAD_FOLDER'] = os.path.join(dir_path, "statics")
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 class UploadFileForm(FlaskForm):
     file = FileField('File', validators=[FileRequired()])
@@ -19,11 +25,13 @@ class UploadFileForm(FlaskForm):
 def home():
     form = UploadFileForm()
     if form.validate_on_submit():
-        file = form.file.data
-        filename = secure_filename(file.filename)
-        save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(save_path)
-        return f'File {filename} uploaded successfully!'
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            file = form.file.data
+            filename = secure_filename(file.filename)
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(save_path)
+            return render_template('result.html')
     
     return render_template('index.html', form=form)
 

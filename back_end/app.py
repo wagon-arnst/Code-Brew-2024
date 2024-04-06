@@ -8,7 +8,7 @@ import logging
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretekey'
-ALLOWED_EXTENSIONS = {'jpeg', 'pdf'}
+ALLOWED_EXTENSIONS = {'jpg', 'pdf'}
 dir_path = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = os.path.join(dir_path, "statics")
 
@@ -27,11 +27,10 @@ def home():
     if form.validate_on_submit():
         file = request.files['file']
         if file and allowed_file(file.filename):
-            file = form.file.data
             filename = secure_filename(file.filename)
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(save_path)
-            return render_template('result.html')
+            return render_template('result.html', pill_name = "fish oil")
     
     return render_template('index.html', form=form)
 

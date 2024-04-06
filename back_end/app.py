@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from werkzeug.utils import secure_filename
@@ -32,7 +32,7 @@ def home():
             file.save(save_path)
             return render_template('result.html', pill_name = "fish oil")
     
-    return render_template('index.html', form=form)
+    return render_template('index3.html', form=form)
 
 
 if __name__ == '__main__':

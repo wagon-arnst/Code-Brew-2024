@@ -2,16 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link rel="stylesheet" href="style.css">
+    <title>Input Image of Pills With Preview Image</title>
 </head>
 <body>
-    
-    <form method="POST" enctype="multipart/form-data"> 
+    <div class="text">
+        <h1>Pill Image Identifier</h1>
+        <p><br/></p>
+        <p>This AI pill identifier is trained by TenserFlow,</p>
+        <p>for CodeBrew 2024</p>
+    </div>
+    <div class="container">
+        <input type="file" id="file" accept="image/*" hidden>
+        <div class="img-area" data-img="">
+            <i class='bx bx-upload icon'></i>
+            <h3>Upload Image Here</h3>
+            <p>Image size must be less than <span>2MB</span></p>
+        </div>
         {{ form.hidden_tag() }}
         {{ form.file() }}
         {{ form.submit() }}
-    </form> 
+    </div>
 </body>
 </html>
